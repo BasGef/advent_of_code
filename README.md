@@ -1,1 +1,3 @@
-# advent_of_code
+# Advent of Code solutions
+
+See https://adventofcode.com for questions
