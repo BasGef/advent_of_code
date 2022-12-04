@@ -23,11 +23,13 @@ def get_values(chars):
     # this is like ord() but with offset -38 (64+26) for lcase and -96 for ucase
     return sum(ord(c) - (38 if ord(c) < 91 else 96) for c in chars)
 
+
 def q3a():
     data = load_data(FILE_PATH)
     data = [split_in_half(line) for line in data]
     duplicates = [get_duplicates(*d) for d in data]
     return sum(get_values(d) for d in duplicates)
+
 
 if __name__ == '__main__':
     print(f'{q3a()=}')
