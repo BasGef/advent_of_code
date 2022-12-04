@@ -11,22 +11,7 @@ def load_data(file_path):
     return data
 
 
-def question1(input_file):
-    data = load_data(input_file)
-
-    max_calories = 0
-    calories = 0
-    for d in data:
-        if not d:  # elves are split by blank lines in source file
-            if calories > max_calories:
-                max_calories = calories
-            calories = 0
-            continue
-        calories += int(d)
-    return max_calories
-
-
-def question2(n_elves= 3, input_file=FILE_PATH):
+def count_calories(n_elves, input_file):
     data = load_data(input_file)
 
     max_calories = [0] * n_elves
@@ -41,7 +26,8 @@ def question2(n_elves= 3, input_file=FILE_PATH):
         calories += int(d)
     return sum(max_calories)
 
+
 if __name__ == '__main__':
-    print(question1(FILE_PATH))
-    print(question2(1, FILE_PATH))
-    print(question2(3, FILE_PATH))
+    answer_1a = count_calories(1, FILE_PATH)
+    answer_1b = count_calories(3, FILE_PATH)
+    print(f'{answer_1a=}, {answer_1b=}')
