@@ -26,18 +26,30 @@ def clean_moves_data(moves: List[str]) -> List[Tuple[int, int, int]]:
     return [tuple(int(d) for d in re.findall(r'\d+', move)) for move in moves]
 
 
-def q5a():
+def q5(reverse_order=True):
     stacks, moves = load_data(FILE_PATH)
     stacks = clean_stacks_data(stacks)
     moves = clean_moves_data(moves)
 
     # TODO: There must be a more efficient way than this?
     for (num, fro, to) in moves:
-        stacks[to-1] += stacks[fro-1][:-num-1:-1]
+        if reverse_order:
+            stacks[to-1] += stacks[fro-1][:-num-1:-1]
+        else:
+            stacks[to - 1] += stacks[fro - 1][-num:]
         stacks[fro-1] = stacks[fro-1][:-num]
 
     return ''.join(stack[-1] for stack in stacks)
 
 
+def q5a():
+    return q5(True)
+
+
+def q5b():
+    return q5(False)
+
+
 if __name__ == '__main__':
     print(f'{q5a()=}')
+    print(f'{q5b()=}')
