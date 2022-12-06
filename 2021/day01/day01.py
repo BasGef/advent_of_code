@@ -2,6 +2,7 @@ FILE_PATH = './input.txt'
 
 from itertools import pairwise
 
+
 def load_data(file_path):
     with open(file_path) as file:
         data = [int(x) for x in file.read().splitlines()]
