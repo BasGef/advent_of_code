@@ -49,11 +49,35 @@ def find_small_folders(node, max_size):
     return folders
 
 
+def find_smallest_folder(node, min_size):
+    folder = node
+    for item in node:
+        if isinstance(item, File) or item.size < min_size:
+            continue
+        smallest_child = find_smallest_folder(item, min_size)
+        if smallest_child.size > folder.size:
+            continue
+        if smallest_child.size >= min_size:
+            folder = smallest_child
+            continue
+        if item.size > folder.size:
+            folder = item
+    return folder
+
+
 def q7a():
     tree = load_file_tree(FILE_PATH)
     folders = find_small_folders(tree, 100_000)
     return sum(f.size for f in folders)
 
 
+def q7b(update_size=30000000, disk_size=70000000):
+    tree = load_file_tree(FILE_PATH)
+    required_space = update_size - (disk_size - tree.size)
+    folder = find_smallest_folder(tree, required_space)
+    return folder.size
+
+
 if __name__ == '__main__':
     print(f'{q7a()=}')
+    print(f'{q7b()=}')
