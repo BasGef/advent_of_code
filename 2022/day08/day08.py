@@ -29,5 +29,40 @@ def q8a():
     data = load_data(FILE_PATH)
     return count_visible_trees(data)
 
+
+def visible_trees_from_tree(tree, sightline):
+    # min_height = 0  # TODO: checking min_height is apparently redundant!
+    visible = 0
+    for other_tree in sightline:
+        # if other_tree < min_height:
+        #     continue
+        visible += 1
+        if other_tree >= tree:
+            break
+        # if other_tree > min_height:
+        #     min_height = other_tree
+    return visible
+
+# TODO: optimize 8b - dont need to check if tree is smaller than previous!
+def q8b():
+    data = load_data(FILE_PATH)
+
+    # Edges will all have score 0, since the one zero edge is multiplied! Skip.
+    scenic_score = 0
+    for row in range(1, data.shape[0]-1):
+        for col in range(1, data.shape[1] -1):
+            tree = data[row, col]
+            down = visible_trees_from_tree(tree, data[row+1:, col])
+            right = visible_trees_from_tree(tree, data[row, col+1:])
+            up = visible_trees_from_tree(tree, data[:row, col][::-1])
+            left = visible_trees_from_tree(tree, data[row, :col][::-1])
+            tree_score = down * right * up * left
+            if tree_score > scenic_score:
+                scenic_score = tree_score
+    return scenic_score
+
+
 if __name__ == '__main__':
     print(f'{q8a()=}')
+    print(f'{q8b()=}')
+
