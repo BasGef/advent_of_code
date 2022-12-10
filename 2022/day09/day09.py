@@ -54,8 +54,7 @@ class Point:
         return f"Point ({self.x}, {self.y})"
 
 
-if __name__ == '__main__':
-
+def q9a():
     with open(FILE_PATH) as file:
         moves = file.read().splitlines()
 
@@ -70,4 +69,8 @@ if __name__ == '__main__':
         steps = tail.follow(head)
         if steps:
             visited.update(steps)
-    print(len(visited))
+    return len(visited)
+
+
+if __name__ == '__main__':
+    print(f'{q9a()=}')
