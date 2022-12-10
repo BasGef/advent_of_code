@@ -34,13 +34,9 @@ def visible_trees_from_tree(tree, sightline):
     # min_height = 0  # TODO: checking min_height is apparently redundant!
     visible = 0
     for other_tree in sightline:
-        # if other_tree < min_height:
-        #     continue
         visible += 1
         if other_tree >= tree:
             break
-        # if other_tree > min_height:
-        #     min_height = other_tree
     return visible
 
 # TODO: optimize 8b - dont need to check if tree is smaller than previous!
