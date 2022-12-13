@@ -1,11 +1,7 @@
 from __future__ import annotations
+from itertools import pairwise
 
 FILE_PATH = r'input.txt'
-
-def load_data(file_path):
-    with open(file_path) as file:
-        data = np.array([[int(c) for c in line] for line in file.read().splitlines()])
-    return data
 
 
 class Point:
@@ -72,5 +68,28 @@ def q9a():
     return len(visited)
 
 
+def q9b():
+    # simply q9a but recursively for points H through 9
+
+    with open(FILE_PATH) as file:
+        moves = file.read().splitlines()
+
+    points = {i: Point(0,0) for i in range(10)}
+    head = points[0]
+    tail = points[9]
+    visited = {tail.coords}
+
+    for move in moves:
+        direction, steps = move.split(' ')
+        for step in range(1, int(steps) + 1):
+            head.move(direction, 1)
+            for leader, follower in pairwise(points.values()):
+                steps = follower.follow(leader)
+                if follower is tail and steps:
+                    visited.update(steps)
+    return len(visited)
+
+
 if __name__ == '__main__':
     print(f'{q9a()=}')
+    print(f'{q9b()=}')
