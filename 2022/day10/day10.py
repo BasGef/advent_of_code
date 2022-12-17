@@ -1,7 +1,7 @@
 FILE_PATH = r'./input.txt'
 
 
-class Clock:
+class CathodeRayTube:
     def __init__(self, start_value=1):
         self._register = start_value
         self.signal_strength = []
@@ -36,10 +36,10 @@ def load_data(file_path):
 
 
 def q10a():
-    clock = Clock()
+    crt = CathodeRayTube()
     for command in load_data(FILE_PATH):
-        clock.do_command(command)
-    return sum(clock.signal_strength)
+        crt.do_command(command)
+    return sum(crt.signal_strength)
 
 
 if __name__ == '__main__':
