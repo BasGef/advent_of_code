@@ -1,4 +1,6 @@
+import turtledemo.penrose
 from collections import deque
+import math
 
 FILE_PATH = r'./input.txt'
 
@@ -9,16 +11,19 @@ class Monkey:
         self._next_monkeys = [None, None]  # (false_monkey, true_monkey)
         self.items = None
         self.inspection_count = 0
+        self.item_modulus = 1
 
-    def throw_items(self, monkeys):
+    def throw_items(self, monkeys, lower_worry_level=True):
         while len(self.items):
-            item = self.inspect(self.items.popleft())
+            item = self.inspect(self.items.popleft(), lower_worry_level)
             destination = self.evaluate_worry_level(item)
             monkeys[destination].catch(item)
 
-    def inspect(self, item):
+    def inspect(self, item, lower_worry_level=True):
         self.inspection_count += 1
-        return self.operation(item) // 3
+        if lower_worry_level:
+            return (self.operation(item) // 3) % self.item_modulus
+        return self.operation(item) % self.item_modulus
 
     def evaluate_worry_level(self, item):
         return self._next_monkeys[item % self.test_value == 0]
@@ -75,17 +80,31 @@ def make_monkeys(data):
     return monkeys
 
 
-def q11a():
+def safe_modulus(monkeys):
+    """
+    Returns the safe modulus for any item <> monkey combination. Note that each
+    monkey has its own PRIME as the test_value. We can therefore safely reduce
+    the size of item by taking the item % mod where mod==prod(test_values)
+    """
+    return math.prod((m.test_value for m in monkeys))
+
+
+def monkey_business_level(iterations=20, reset_worry_level=True):
     data = load_data(FILE_PATH)
     monkeys = make_monkeys(data)
 
-    for _ in range(20):
+    modulus = safe_modulus(monkeys)  # This is needed for part 2 performance
+    for monkey in monkeys:
+        monkey.item_modulus = modulus
+
+    for _ in range(iterations):
         for monkey in monkeys:
-            monkey.throw_items(monkeys)
+            monkey.throw_items(monkeys, reset_worry_level)
 
     monkey_vals = sorted((m.inspection_count for m in monkeys), reverse=True)
     return monkey_vals[0] * monkey_vals[1]
 
 
 if __name__ == '__main__':
-    print(f'{q11a()}')
+    print(f'q11a={monkey_business_level(20, True)}')
+    print(f'q11b={monkey_business_level(10_000, False)}')
