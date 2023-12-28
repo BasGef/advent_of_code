@@ -16,7 +16,7 @@ def cube_count(game: str) -> Set[CubeCount]:
     return (CubeCount(key, int(value)) for _, value, key in cubes)
 
 
-def is_game_possible(game: str, max_cubes: dict) ->  bool:
+def is_game_possible(game: str, max_cubes: dict) -> bool:
     cubes = cube_count(game)
     for cube in cubes:
         if cube.count > max_cubes[cube.color]:
