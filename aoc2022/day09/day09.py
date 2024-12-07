@@ -77,7 +77,7 @@ def q9b():
     points = {i: Point(0,0) for i in range(10)}
     head = points[0]
     tail = points[9]
-    visited = {tail.coords}
+    visited = {tail.locations}
 
     for move in moves:
         direction, steps = move.split(' ')
