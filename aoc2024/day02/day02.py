@@ -1,5 +1,4 @@
 import itertools
-import pandas as pd
 
 FILE_PATH = r'./aoc2024/day02/input.txt'
 
