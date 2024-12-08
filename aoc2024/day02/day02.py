@@ -35,6 +35,6 @@ if __name__ == '__main__':
     answer_2a = sum(validate_report(report) for report in data)
     answer_2b = sum(validate_report_dampened(report) for report in data)
 
-    print(f'{answer2a=}')
-    print(f'{answer2b=}')
+    print(f'{answer_2a=}')
+    print(f'{answer_2b=}')
 
