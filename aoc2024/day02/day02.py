@@ -32,8 +32,9 @@ def validate_report_dampened(report, max_diff=3, max_errors=1):
 
 if __name__ == '__main__':
     data = read_data()
-    answer_1a = sum(validate_report(report) for report in data)
-    answer_1b = sum(validate_report_dampened(report) for report in data)
+    answer_2a = sum(validate_report(report) for report in data)
+    answer_2b = sum(validate_report_dampened(report) for report in data)
 
-
+    print(f'{answer2a=}')
+    print(f'{answer2b=}')
 
