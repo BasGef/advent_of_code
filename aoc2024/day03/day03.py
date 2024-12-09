@@ -13,14 +13,13 @@ def rowvec(array):
 
 
 def simple_mul(data):  # 3a
-    regex = r'mul\((\d+),(\d+)\)'
-    muls = re.findall(regex, data)
+    muls = re.findall(r'mul\((\d+),(\d+)\)', data)
     return sum(int(m[0]) * int(m[1]) for m in muls)
 
 
 def conditional_mul(data):  # 3b
     # TODO: This must surely be possible with one regex
-    matches = re.finditer(regex, data)
+    matches = re.finditer(r'mul\((\d+),(\d+)\)', data)
     matches = np.array([(m.start(), int(m.group(1)) * int(m.group(2))) for m in matches])
 
     dos = re.finditer(r'do\(\)', data)
@@ -34,7 +33,7 @@ def conditional_mul(data):  # 3b
     mult_values = matches[:, 1].reshape(-1, 1)
     mult_matrix = np.where(enabled_pos < mult_pos, enabled_values * mult_values, np.nan)
 
-    last_valid = (~np.isnan(aaa)).sum(axis=1) - 1  # only use the last value in each row
+    last_valid = (~np.isnan(mult_matrix)).sum(axis=1) - 1  # only use the last value in each row
     return int(mult_matrix[range(len(mult_matrix)), last_valid].sum())
 
 
