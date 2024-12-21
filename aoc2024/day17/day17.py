@@ -59,11 +59,7 @@ def bxc(operand):
 
 def out(operand):
     output = str(combo_operand(operand) % 8)
-
-    # since we need to comma separate all output anyway, no need to do this here
-    # if len(output) <= 1:
     return output
-    # return ','.join(o for o in output)
 
 
 def process_instruction(opcode, operand):
@@ -89,15 +85,42 @@ def combo_operand(operand):
     return register[chr(61 + operand)]
 
 
-if __name__ == '__main__':
-    register, instructions = read_code()
+def run_program(override_a=None, check_program=False):
+    global register
+    global instructions
+    global pointer
+
+    if override_a is not None:
+        register['A'] = override_a
+
     pointer = 0
     output = ''
+    output_check = ','.join(map(str, instructions))
 
     while pointer < len(instructions):
         opc, oper = instructions[pointer: pointer + 2]
         output += process_instruction(opc, oper)
+        if check_program and output != output_check[:len(output)]:
+            return output
         pointer += 2
 
-    answer_17a = ','.join(o for o in output)
+    output = ','.join(o for o in output)
+    return output
+
+
+if __name__ == '__main__':
+    register, instructions = read_code()
+    pointer = 0
+
+    answer_17a = run_program()
     print(f'{answer_17a=}')
+
+    r, _ = read_code()
+    instructions_string = ','.join(map(str, instructions))
+    for i in range(200_000_000):
+        register = r
+        pointer = 0
+        if run_program(i, True) == instructions_string:
+            answer_17b = i
+            break
+        print(i)
