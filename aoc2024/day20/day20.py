@@ -53,9 +53,9 @@ def count_cheats(distances, max_cheat_time, min_time_saved):
     for track_position in range(min_time_saved + 1,
                                 int(max(distances[~np.isnan(distances)])) + 1):
         row, col = np.where(distances == track_position)
-        cheat_list = np.where(
-            (abs(rows - row) + abs(cols - col) <= max_cheat_time) &
-            (distances + abs(rows - row) + abs(cols - col) <= track_position - min_time_saved))
+        distance = abs(rows - row) + abs(cols - col)
+        time_saved = track_position - distances - abs(rows - row) - abs(cols - col)
+        cheat_list = np.where((distance <= max_cheat_time) & (time_saved >= min_time_saved))
         cheats += len(cheat_list[0])
     return cheats
 
