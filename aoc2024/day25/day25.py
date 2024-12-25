@@ -13,7 +13,9 @@ def read_data():
         (locks if lock_key[0] == '#' else keys).append(heights)
     return keys, locks, lock_height
 
+
 if __name__ == '__main__':
+    keys, locks, lock_height = read_data()
     combinations = [(lock, key) for lock in locks for key in keys]
     matches = [all(sum(c) <= 7 for c in zip(*combination)) for combination in combinations]
     answer_25a = sum(matches)
