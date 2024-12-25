@@ -2,8 +2,6 @@ import itertools
 import math
 FILE_NAME = r'aoc2024/day07/input.txt'
 
-# 6083020304036 is answer a
-
 # 31131748701538 is too low
 # 52820837998879 is too low
 
@@ -19,8 +17,6 @@ def read_data():
 def validate(total, values):
     if len(values) == 1:
         return total == values[0]
-    if sum(values[:2]) > total:
-        return False
     if validate(total, [values[0] * values[1]] + values[2:]):
         return True
     return validate(total, [values[0] + values[1]] + values[2:])
