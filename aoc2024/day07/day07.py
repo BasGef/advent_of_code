@@ -1,9 +1,5 @@
-import itertools
 import math
 FILE_NAME = r'aoc2024/day07/input.txt'
-
-# 31131748701538 is too low
-# 52820837998879 is too low
 
 
 def read_data():
@@ -14,51 +10,20 @@ def read_data():
     return data
 
 
-def validate(total, values):
+def validate(total, values, allow_concat=False):
     if len(values) == 1:
         return total == values[0]
-    if validate(total, [values[0] * values[1]] + values[2:]):
+    if validate(total, [values[0] * values[1]] + values[2:], allow_concat):
         return True
-    return validate(total, [values[0] + values[1]] + values[2:])
+    if validate(total, [values[0] + values[1]] + values[2:], allow_concat):
+        return True
+    if not allow_concat:
+        return False
+    return validate(total, [concatenate(*values[:2])] + values[2:], True)
 
 
 def concatenate(value1, value2):
     return value1 * 10 ** (math.floor(math.log10(value2))+1) + value2
-
-
-def validate2(total, values):
-    if len(values) == 1:
-        return total == values[0]
-    if sum(values[:2]) > total:
-        return False
-    if validate2(total, [values[0] * values[1]] + values[2:]):
-        return True
-    if validate2(total, [values[0] + values[1]] + values[2:]):
-        return True
-    # return validate2(total, [concatenate(values[0], values[1])] + values[2:])
-    for i in range(len(values) - 1):
-        if validate2(total, values[:i] + [concatenate(*values[i:i+2])] + values[i+2:]):
-            return True
-    return False
-
-def validate3(total, values):
-    if len(values) == 1:
-        return total == values[0]
-    if sum(values[:2]) > total:
-        return False
-    if validate3(total, [values[0] * values[1]] + values[2:]):
-        return True
-    if validate3(total, [values[0] + values[1]] + values[2:]):
-        return True
-    # return validate2(total, [concatenate(values[0], values[1])] + values[2:])
-    for i in range(len(values) - 1):
-        if validate3(total, [concatenate3(values[:i+2])] + values[i+2:]):
-            return True
-    return False
-
-
-def concatenate3(values):
-    return int(''.join(map(str, values)))
 
 
 if __name__ == '__main__':
@@ -71,13 +36,11 @@ if __name__ == '__main__':
             continue
         data2.append((total, values))
     answer_7a = calibration_result
+    print(f'{answer_7a=}')
 
     calibration_result2 = 0
-    cur = 0
     for total, values in data2:
-        print(cur, total, values)
-        # if validate2(total, values):
-        if validate3(total, values):
+        if validate(total, values, allow_concat=True):
             calibration_result2 += total
-        cur += 1
     answer_7b = calibration_result + calibration_result2
+    print(f'{answer_7b=}')
