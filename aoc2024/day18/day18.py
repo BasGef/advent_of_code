@@ -22,6 +22,7 @@ def make_grid(size, walls):
 def find_paths(grid, start_coordinate, exit_coordinate):
     open_coordinates = [start_coordinate]
     visited = {start_coordinate: 0}
+    path = {start_coordinate: {start_coordinate}}
 
     while open_coordinates:
         coordinate = open_coordinates.pop()
@@ -36,10 +37,21 @@ def find_paths(grid, start_coordinate, exit_coordinate):
                 continue  # cheaper option found
 
             visited[new_coordinate] = visited[coordinate] + 1
+            path[new_coordinate] = path[coordinate] | {new_coordinate}
             if new_coordinate == exit_coordinate:
                 break  # no need to test other directions
             open_coordinates.append(new_coordinate)
-    return visited
+    return visited, path
+
+
+def find_breaking_block(grid, paths, exit_coordinate):  # TODO: this can probably be optimised
+    for x, y in data[BYTES:]:
+        grid[y, x] = '#'
+        if (y, x) not in paths[exit_coordinate]:
+            continue
+        _, paths = find_paths(grid, start_coordinate, exit_coordinate)
+        if exit_coordinate not in paths:
+            return x, y
 
 
 if __name__ == '__main__':
@@ -48,10 +60,11 @@ if __name__ == '__main__':
 
     start_coordinate = (0, 0)
     exit_coordinate = tuple(np.array(grid.shape) - 1)
-    paths = find_paths(grid, start_coordinate, exit_coordinate)
-    answer_18a = paths[exit_coordinate]
+    steps, paths = find_paths(grid, start_coordinate, exit_coordinate)
+    answer_18a = steps[exit_coordinate]
 
     print(f'{answer_18a}')
 
-
-
+    breaking_block = find_breaking_block(grid, paths, exit_coordinate)
+    answer_18b = ','.join(map(str, breaking_block))
+    print(answer_18b)
